@@ -32,7 +32,7 @@ RUN sed -i -e '/\[rpmforge\]/ a \priority=3' /etc/yum.repos.d/rpmforge.repo
 RUN yum update -y
 
 # Install tar
-RUN yum install -y tar
+RUN yum install -y tar bash
 
 # Cleanup
 RUN rm -r /tmp/*
