@@ -10,8 +10,8 @@ RUN sed -ir -e "s/enabled=1/enabled=0/" etc/yum/pluginconf.d/fastestmirror.conf
 # Update all repos
 RUN yum update -y
 
-# Better editor for troubleshooting
-RUN yum install -y vim
+# Some helpful tools
+RUN yum install -y vim tar bash
 
 # Set priorities for default repositories
 RUN yum install -y yum-priorities
@@ -26,9 +26,6 @@ RUN curl -o /tmp/rpmforge.rpm -L http://pkgs.repoforge.org/rpmforge-release/rpmf
 RUN rpm -Uvh /tmp/rpmforge.rpm
 RUN sed -i -e '/\[rpmforge\]/ a \priority=3' /etc/yum.repos.d/rpmforge.repo
 RUN yum update -y
-
-# Install tar
-RUN yum install -y tar bash
 
 # Cleanup
 RUN rm -r /tmp/*
