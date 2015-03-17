@@ -13,6 +13,9 @@ RUN yum update -y
 # Some helpful tools
 RUN yum install -y vim tar bash
 
+# Make it possible to set password
+RUN yum install -y passwd
+
 # Give systemd a try
 RUN yum remove -y fakesystemd
 RUN yum install -y systemd dhclient
