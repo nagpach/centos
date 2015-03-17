@@ -11,7 +11,7 @@ RUN sed -ir -e "s/enabled=1/enabled=0/" etc/yum/pluginconf.d/fastestmirror.conf
 RUN yum update -y
 
 # Some helpful tools
-RUN yum install -y vim tar bash
+RUN yum install -y vim tar
 
 # Make it possible to set password
 RUN yum install -y passwd
