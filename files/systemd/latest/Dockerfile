@@ -37,6 +37,12 @@ RUN yum update -y
 # No graphical login
 RUN ln -fs multi-user.target /etc/systemd/system/default.target
 
+# Supress error message
+RUN ln -fs /proc/self/mounts /etc/mtab
+
+# Remove fstab
+RUN rm /etc/fstab
+
 # Cleanup
 RUN rm -r /tmp/*
 RUN yum clean -y all
