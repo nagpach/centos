@@ -34,6 +34,9 @@ RUN rpm -Uvh /tmp/rpmforge.rpm
 RUN sed -i -e '/\[rpmforge\]/ a \priority=3' /etc/yum.repos.d/rpmforge.repo
 RUN yum update -y
 
+# No graphical login
+RUN ln -s multi-user.target /etc/systemd/system/default.target
+
 # Cleanup
 RUN rm -r /tmp/*
 RUN yum clean -y all
