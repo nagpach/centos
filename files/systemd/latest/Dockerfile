@@ -35,9 +35,9 @@ RUN sed -i -e '/\[rpmforge\]/ a \priority=3' /etc/yum.repos.d/rpmforge.repo
 RUN yum update -y
 
 # No graphical login
-RUN ln -fs multi-user.target /etc/systemd/system/default.target
+RUN ln -fs /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target
 
-# Supress error message
+# Add link for mtab
 RUN ln -fs /proc/self/mounts /etc/mtab
 
 # Remove fstab
