@@ -34,6 +34,9 @@ RUN rpm -Uvh /tmp/rpmforge.rpm
 RUN sed -i -e '/\[rpmforge\]/ a \priority=3' /etc/yum.repos.d/rpmforge.repo
 RUN yum update -y
 
+# Make it possible to login via machinectl
+ADD container-getty@.service /usr/lib/systemd/system/container-getty@.service
+
 # No graphical login
 RUN ln -fs /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target
 
