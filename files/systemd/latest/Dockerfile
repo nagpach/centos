@@ -13,8 +13,11 @@ RUN ln -sf /proc/self/fd /dev/fd
 # Update all repos
 RUN yum update -y
 
-# Better editor for troubleshooting
-RUN yum install -y vim
+# Some helpful tools
+RUN yum install -y vim tar
+
+# Make it possible to set password
+RUN yum install -y passwd
 
 # Give systemd a try
 RUN yum remove -y fakesystemd
@@ -34,8 +37,17 @@ RUN rpm -Uvh /tmp/rpmforge.rpm
 RUN sed -i -e '/\[rpmforge\]/ a \priority=3' /etc/yum.repos.d/rpmforge.repo
 RUN yum update -y
 
-# Install tar
-RUN yum install -y tar
+# Make it possible to login via machinectl
+ADD container-getty@.service /usr/lib/systemd/system/container-getty@.service
+
+# No graphical login
+RUN ln -fs /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target
+
+# Add link for mtab
+RUN ln -fs /proc/self/mounts /etc/mtab
+
+# Remove fstab
+RUN rm /etc/fstab
 
 # Cleanup
 RUN rm -r /tmp/*
