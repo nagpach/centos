@@ -8,42 +8,42 @@ MAINTAINER dev@fedux.org
 RUN sed -ir -e "s/enabled=1/enabled=0/" /etc/yum/pluginconf.d/fastestmirror.conf
 
 # Update all repos
-RUN yum update -y centos-release && \
-    yum update -y
+RUN yum update -y centos-release \
+    && yum update -y
 
 # Some helpful tools
 RUN yum install -y vim tar passwd dhclient curl
 
 # Set priorities for default repositories
-RUN yum install -y yum-priorities && \
-    sed -i -e '/\[base\]/ a \priority=1' /etc/yum.repos.d/CentOS-Base.repo && \
-    sed -i -e '/\[updates\]/ a \priority=1' /etc/yum.repos.d/CentOS-Base.repo && \
-    sed -i -e '/\[extras\]/ a \priority=1' /etc/yum.repos.d/CentOS-Base.repo && \
-    sed -i -e '/\[centosplus\]/ a \priority=2' /etc/yum.repos.d/CentOS-Base.repo
+RUN yum install -y yum-priorities \
+    && sed -i -e '/\[base\]/ a \priority=1' /etc/yum.repos.d/CentOS-Base.repo \
+    && sed -i -e '/\[updates\]/ a \priority=1' /etc/yum.repos.d/CentOS-Base.repo \
+    && sed -i -e '/\[extras\]/ a \priority=1' /etc/yum.repos.d/CentOS-Base.repo \
+    && sed -i -e '/\[centosplus\]/ a \priority=2' /etc/yum.repos.d/CentOS-Base.repo
 
 # Make rpmforge work
-RUN rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el7.rf.x86_64.rpm && \
-    sed -i -e '/\[rpmforge\]/ a \priority=3' /etc/yum.repos.d/rpmforge.repo
+RUN rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el7.rf.x86_64.rpm \
+    && sed -i -e '/\[rpmforge\]/ a \priority=3' /etc/yum.repos.d/rpmforge.repo
 
 # Setup gosu for easier command execution
-RUN gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
-RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.2/gosu-amd64" \
-  && curl -o /usr/local/bin/gosu.asc -SL "https://github.com/tianon/gosu/releases/download/1.2/gosu-amd64.asc" \
-  && gpg --verify /usr/local/bin/gosu.asc \
-  && rm /usr/local/bin/gosu.asc \
-  && rm -r /root/.gnupg/ \
-  && chmod +x /usr/local/bin/gosu
+RUN gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+    && curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.2/gosu-amd64" \
+    && curl -o /usr/local/bin/gosu.asc -SL "https://github.com/tianon/gosu/releases/download/1.2/gosu-amd64.asc" \
+    && gpg --verify /usr/local/bin/gosu.asc \
+    && rm /usr/local/bin/gosu.asc \
+    && rm -r /root/.gnupg/ \
+    && chmod +x /usr/local/bin/gosu
 
 # Make it possible to login via machinectl
 ADD container-getty@.service /usr/lib/systemd/system/container-getty@.service
 
 # No graphical login
-RUN ln -fs /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target && \
-    ln -fs /proc/self/mounts /etc/mtab
+RUN ln -fs /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target \
+    && ln -fs /proc/self/mounts /etc/mtab
 
 # Cleanup
-RUN rm -fr /tmp/* && \
-    yum clean -y all
+RUN rm -fr /tmp/* \
+    && yum clean -y all
 
 # Working Directory
 WORKDIR /
