@@ -7,6 +7,9 @@ MAINTAINER fedux.org
 # No mirror plugin
 RUN sed -ir -e "s/enabled=1/enabled=0/" etc/yum/pluginconf.d/fastestmirror.conf
 
+# Fix for broken fd https://github.com/shykes/docker-dev/commit/6e76096984cf90c92f3eda7d3415e93b13a87517
+RUN ln -sf /proc/self/fd /dev/fd
+
 # Update all repos
 RUN yum update -y
 
