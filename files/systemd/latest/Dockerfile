@@ -20,9 +20,12 @@ RUN yum install -y vim tar
 # Make it possible to set password
 RUN yum install -y passwd
 
+# DHCP client
+RUN yum install -y dhclient
+
 # Give systemd a try
-RUN yum remove -y fakesystemd systemd-container-libs
-RUN yum install -y systemd dhclient
+RUN yum remove -y fakesystemd
+RUN yum install -y systemd
 
 # Set priorities for default repositories
 RUN yum install -y yum-priorities
@@ -50,7 +53,7 @@ RUN ln -fs /proc/self/mounts /etc/mtab
 RUN rm /etc/fstab
 
 # Cleanup
-RUN rm -r /tmp/*
+RUN rm -fr /tmp/*
 RUN yum clean -y all
 
 # Working Directory

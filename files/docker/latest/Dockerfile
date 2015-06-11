@@ -31,7 +31,7 @@ RUN sed -i -e '/\[rpmforge\]/ a \priority=3' /etc/yum.repos.d/rpmforge.repo
 RUN yum update -y
 
 # Cleanup
-RUN rm -r /tmp/*
+RUN rm -fr /tmp/*
 RUN yum clean -y all
 
 # Working Directory
