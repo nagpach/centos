@@ -5,7 +5,7 @@ MAINTAINER fedux.org
 # ENV https_proxy https://172.17.42.1:3128
 
 # No mirror plugin
-RUN sed -ir -e "s/enabled=1/enabled=0/" etc/yum/pluginconf.d/fastestmirror.conf
+RUN sed -ir -e "s/enabled=1/enabled=0/" /etc/yum/pluginconf.d/fastestmirror.conf
 
 # Update all repos
 RUN yum update -y
