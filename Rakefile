@@ -26,16 +26,6 @@ namespace :docker do
   task :run, :command do |_, task_args|
     command = task_args[:command]
 
-    cwd = Pathname.new(Dir.getwd)
-    tmp_dir = cwd + Pathname.new('tmp')
-    data_dir = tmp_dir + Pathname.new('data')
-    log_dir = tmp_dir + Pathname.new('log')
-    sites_dir = tmp_dir + Pathname.new('sites')
-
-    FileUtils.mkdir_p data_dir
-    FileUtils.mkdir_p log_dir
-    FileUtils.mkdir_p sites_dir
-
     args =[]
     args << '-it'
     args << '--rm'
