@@ -23,10 +23,6 @@ RUN yum install -y passwd
 # DHCP client
 RUN yum install -y dhclient
 
-# Give systemd a try
-RUN yum remove -y fakesystemd
-RUN yum install -y systemd
-
 # Set priorities for default repositories
 RUN yum install -y yum-priorities
 RUN sed -i -e '/\[base\]/ a \priority=1' /etc/yum.repos.d/CentOS-Base.repo
@@ -59,5 +55,9 @@ RUN yum clean -y all
 # Working Directory
 WORKDIR /
 
-# Shell as fall back
-CMD ["/bin/bash"]
+# Make those available to run systemd as init daemon
+VOLUME ["/run", "/tmp"]
+ENV container docker
+
+# Run systemd
+CMD ["/usr/sbin/init"]

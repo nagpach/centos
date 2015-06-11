@@ -1,11 +1,8 @@
 FROM centos:latest
-MAINTAINER fedux.org
+MAINTAINER dev@fedux.org
 
 # ENV http_proxy http://172.17.42.1:3128
 # ENV https_proxy https://172.17.42.1:3128
-
-# Fix for broken fd https://github.com/shykes/docker-dev/commit/6e76096984cf90c92f3eda7d3415e93b13a87517
-# RUN ln -sf /proc/self/fd /dev/fd
 
 # No mirror plugin
 RUN sed -ir -e "s/enabled=1/enabled=0/" /etc/yum/pluginconf.d/fastestmirror.conf
@@ -37,5 +34,9 @@ RUN yum clean -y all
 # Working Directory
 WORKDIR /
 
-# Shell as fall back
-CMD ["/bin/bash"]
+# Make those available to run systemd as init daemon
+VOLUME ["/run", "/tmp"]
+ENV container docker
+
+# Run systemd
+CMD ["/usr/sbin/init"]
