@@ -5,8 +5,6 @@
 There are the following images available:
 
 * latest (= systemd-latest)
-* docker-latest
-* systemd-latest
 
 ## Further description of images
 
@@ -20,9 +18,6 @@ There are the following images available:
 
 ### "systemd-"-images
 
-All `systemd-`-images have `systemd` installed. They should be run with
-`systemd-nspawn`.
+To run a image please use this command:
 
-### "docker-"-images
-
-All `docker-`-images are compatible with `docker`.
+docker run -ti -v /sys/fs/cgroup:/sys/fs/cgroup:ro username/centos

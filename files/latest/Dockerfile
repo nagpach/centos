@@ -14,6 +14,12 @@ RUN yum update -y
 # Some helpful tools
 RUN yum install -y vim tar
 
+# Make it possible to set password
+RUN yum install -y passwd
+
+# DHCP client
+RUN yum install -y dhclient
+
 # Set priorities for default repositories
 RUN yum install -y yum-priorities
 RUN sed -i -e '/\[base\]/ a \priority=1' /etc/yum.repos.d/CentOS-Base.repo
@@ -26,6 +32,15 @@ RUN yum install -y curl
 RUN rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el7.rf.x86_64.rpm
 RUN sed -i -e '/\[rpmforge\]/ a \priority=3' /etc/yum.repos.d/rpmforge.repo
 RUN yum update -y
+
+# Make it possible to login via machinectl
+ADD container-getty@.service /usr/lib/systemd/system/container-getty@.service
+
+# No graphical login
+RUN ln -fs /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target
+
+# Add link for mtab
+RUN ln -fs /proc/self/mounts /etc/mtab
 
 # Cleanup
 RUN rm -fr /tmp/*
