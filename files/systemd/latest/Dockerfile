@@ -20,7 +20,7 @@ RUN yum install -y vim tar
 RUN yum install -y passwd
 
 # Give systemd a try
-RUN yum remove -y fakesystemd
+RUN yum remove -y fakesystemd systemd-container-libs
 RUN yum install -y systemd dhclient
 
 # Set priorities for default repositories
