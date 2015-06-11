@@ -3,8 +3,8 @@ require 'pathname'
 task default: 'docker:build'
 
 namespace :docker do
-  image_name = 'maxmeyer/centos'
-  container_name = 'rails1'
+  image_name = 'feduxorg/centos'
+  container_name = 'centos'
 
   desc 'Build docker image'
   task :build, :nocache do |_, args|
@@ -17,7 +17,9 @@ namespace :docker do
     cmdline << "-t #{image_name}"
     cmdline << '.'
 
-    sh cmdline.join(' ')
+    Dir.chdir 'files/latest' do
+      sh cmdline.join(' ')
+    end
   end
 
   desc 'Run docker container'
@@ -38,6 +40,7 @@ namespace :docker do
     args << '-it'
     args << '--rm'
     args << "--name #{container_name}"
+    args << "-v /sys/fs/cgroup:/sys/fs/cgroup"
 
     cmdline = []
     cmdline << 'docker'
