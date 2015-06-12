@@ -1,8 +1,8 @@
 FROM centos:latest
 MAINTAINER dev@fedux.org
 
-# ENV http_proxy http://172.17.42.1:3128
-# ENV https_proxy https://172.17.42.1:3128
+ENV http_proxy http://172.17.42.1:3128
+ENV https_proxy https://172.17.42.1:3128
 
 # No mirror plugin
 RUN sed -ir -e "s/enabled=1/enabled=0/" /etc/yum/pluginconf.d/fastestmirror.conf
@@ -12,7 +12,6 @@ RUN yum update -y centos-release \
     && yum update -y
 
 # Some helpful tools
-# net-tools telnet
 RUN yum install -y vim tar passwd dhclient curl openssh-server
 
 # Set priorities for default repositories
@@ -38,13 +37,25 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4
 # Make it possible to login via machinectl
 ADD container-getty@.service /usr/lib/systemd/system/container-getty@.service
 
+# Setup dbus
+RUN yum install -y dbus
+ADD dbus.service /usr/lib/systemd/system/dbus.service
+RUN systemctl enable dbus
+
 # No need to configure the network the network is setup by docker
 RUN sed -i -e 's/NETWORKING=.*$/NETWORKING=no/' /etc/sysconfig/network
 
 # Setup ssh
 RUN install -m 0755 -d /var/ssh/authorized_keys/ \
+    && install -m 0755 -d /var/ssh/host_keys \
     && sed -i -e 's/^AuthorizedKeysFile.*/AuthorizedKeysFile	\/var\/ssh\/authorized_keys\/%u/' /etc/ssh/sshd_config \
-    && sed -i -e 's/^PasswordAuthentication.*/PasswordAuthentication	no/' /etc/ssh/sshd_config
+    && sed -i -e 's/^PasswordAuthentication.*/PasswordAuthentication	no/' /etc/ssh/sshd_config \
+    && sed -i -e 's/^#UseDNS.*/UseDNS	no/' /etc/ssh/sshd_config \
+    && sed -i -e '/^HostKey/ s/etc\/ssh/var\/ssh\/host_keys/' /etc/ssh/sshd_config \
+    && sed -i -e 's/etc\/ssh/var\/ssh\/host_keys/' /usr/lib/systemd/system/sshd-keygen.service \
+    && sed -i -e 's/etc\/ssh/var\/ssh\/host_keys/' /usr/sbin/sshd-keygen
+
+VOLUME ["/var/ssh/"]
 
 # No graphical login
 RUN ln -sf /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target
