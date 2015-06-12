@@ -1,8 +1,8 @@
 FROM centos:latest
 MAINTAINER dev@fedux.org
 
-ENV http_proxy http://172.17.42.1:3128
-ENV https_proxy https://172.17.42.1:3128
+# ENV http_proxy http://172.17.42.1:3128
+# ENV https_proxy https://172.17.42.1:3128
 
 # No mirror plugin
 RUN sed -ir -e "s/enabled=1/enabled=0/" /etc/yum/pluginconf.d/fastestmirror.conf
@@ -68,7 +68,7 @@ RUN rm -fr /tmp/* \
 WORKDIR /
 
 # Make those available to run systemd as init daemon
-VOLUME ["/sys/fs/cgroup", "/run", "/tmp"]
+VOLUME ["/sys/fs/cgroup", "/run", "/tmp", "/var/log/journal"]
 ENV container docker
 
 # Run systemd

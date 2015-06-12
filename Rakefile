@@ -26,11 +26,15 @@ namespace :docker do
   task :run, :command do |_, task_args|
     command = task_args[:command]
 
+    mkdir_p %w(var/ssh/authorized_keys var/ssh/host_keys)
+
     args =[]
     args << '-it'
     args << '--rm'
     args << "--name #{container_name}"
+    args << "-p 8022:22"
     args << "-v /sys/fs/cgroup:/sys/fs/cgroup"
+    args << "-v #{File.expand_path('var/ssh')}:/var/ssh/"
 
     cmdline = []
     cmdline << 'docker'
