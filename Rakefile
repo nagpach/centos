@@ -34,7 +34,8 @@ namespace :docker do
     args << "--name #{container_name}"
     args << "-p 8022:22"
     args << "-v /sys/fs/cgroup:/sys/fs/cgroup"
-    args << "-v #{File.expand_path('var/ssh')}:/var/ssh/"
+    args << "-v #{File.expand_path('var/ssh')}:/var/ssh/" if File.directory? 'var/ssh'
+    # args << "-v /var/log/journal:/var/log/journal" if File.directory? '/var/log/journal'
 
     cmdline = []
     cmdline << 'docker'
