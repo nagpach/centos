@@ -4,7 +4,7 @@
 
 There are the following images available:
 
-* latest (= systemd-latest)
+* latest
 
 ## Further description of images
 
