@@ -12,7 +12,8 @@ RUN yum update -y centos-release \
     && yum update -y
 
 # Some helpful tools
-RUN yum install -y vim tar passwd dhclient curl
+# net-tools telnet
+RUN yum install -y vim tar passwd dhclient curl openssh-server
 
 # Set priorities for default repositories
 RUN yum install -y yum-priorities \
@@ -37,9 +38,16 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4
 # Make it possible to login via machinectl
 ADD container-getty@.service /usr/lib/systemd/system/container-getty@.service
 
+# No need to configure the network the network is setup by docker
+RUN sed -i -e 's/NETWORKING=.*$/NETWORKING=no/' /etc/sysconfig/network
+
+# Setup ssh
+RUN install -m 0755 -d /var/ssh/authorized_keys/ \
+    && sed -i -e 's/^AuthorizedKeysFile.*/AuthorizedKeysFile	\/var\/ssh\/authorized_keys\/%u/' /etc/ssh/sshd_config \
+    && sed -i -e 's/^PasswordAuthentication.*/PasswordAuthentication	no/' /etc/ssh/sshd_config
+
 # No graphical login
-RUN ln -fs /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target \
-    && ln -fs /proc/self/mounts /etc/mtab
+RUN ln -sf /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target
 
 # Cleanup
 RUN rm -fr /tmp/* \
