@@ -22,8 +22,12 @@ RUN yum install -y yum-priorities \
     && sed -i -e '/\[centosplus\]/ a \priority=2' /etc/yum.repos.d/CentOS-Base.repo
 
 # Make rpmforge work
-RUN rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el7.rf.x86_64.rpm \
-    && sed -i -e '/\[rpmforge\]/ a \priority=3' /etc/yum.repos.d/rpmforge.repo
+ADD enable-rpmforge.sh /usr/local/bin/enable-rpmforge.sh
+RUN chmod +x /usr/local/bin/enable-rpmforge.sh
+
+# Make epel work
+ADD enable-epel.sh /usr/local/bin/enable-epel.sh
+RUN chmod +x /usr/local/bin/enable-epel.sh
 
 # Setup gosu for easier command execution
 RUN gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
