@@ -4,7 +4,7 @@ task default: 'docker:build'
 
 namespace :docker do
   image_name = 'feduxorg/centos'
-  container_name = 'centos'
+  container_name = 'centos1'
 
   desc 'Build docker image'
   task :build, :nocache do |_, args|
