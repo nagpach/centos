@@ -59,7 +59,8 @@ RUN install -m 0755 -d /var/ssh/authorized_keys/ \
     && sed -i -e 's/^#UseDNS.*/UseDNS	no/' /etc/ssh/sshd_config \
     && sed -i -e '/^HostKey/ s/etc\/ssh/var\/ssh\/host_keys/' /etc/ssh/sshd_config \
     && sed -i -e 's/etc\/ssh/var\/ssh\/host_keys/' /usr/lib/systemd/system/sshd-keygen.service \
-    && sed -i -e 's/etc\/ssh/var\/ssh\/host_keys/' /usr/sbin/sshd-keygen
+    && sed -i -e 's/etc\/ssh/var\/ssh\/host_keys/' /usr/sbin/sshd-keygen \
+    && systemctl disable sshd
 
 VOLUME ["/var/ssh/"]
 
