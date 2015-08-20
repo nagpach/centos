@@ -49,7 +49,7 @@ ADD dbus.service /usr/lib/systemd/system/dbus.service
 RUN systemctl enable dbus
 
 # No need to configure the network the network is setup by docker
-RUN sed -i -e "s/NETWORKING=.*$/NETWORKING=${NETWORKING_ENABLED}/" /etc/sysconfig/network
+RUN sed -i -e "$a \ NETWORKING=${NETWORKING_ENABLED}" /etc/sysconfig/network
 
 # Setup ssh
 RUN install -m 0755 -d /var/ssh/authorized_keys/ \
