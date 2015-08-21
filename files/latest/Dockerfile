@@ -1,6 +1,7 @@
 FROM centos:latest
 MAINTAINER dev@fedux.org
 
+# Disable networking by default
 ENV NETWORKING_ENABLED no
 
 # ENV http_proxy http://172.17.42.1:3128
@@ -49,7 +50,7 @@ ADD dbus.service /usr/lib/systemd/system/dbus.service
 RUN systemctl enable dbus
 
 # No need to configure the network the network is setup by docker
-RUN sed -i -e "$a \ NETWORKING=${NETWORKING_ENABLED}" /etc/sysconfig/network
+RUN sed -i -e "\$aNETWORKING=${NETWORKING_ENABLED}" /etc/sysconfig/network
 
 # Setup ssh
 RUN install -m 0755 -d /var/ssh/authorized_keys/ \
