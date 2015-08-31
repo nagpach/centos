@@ -39,3 +39,13 @@ RUN /usr/sbin/sshd-keygen
 ```bash
 docker build -t username/centos-xyz .
 ```
+
+### Login Prompt
+
+If you prefer to have a Login Prompt you need to add the following in your
+`Dockerfile`.
+
+~~~docker
+RUN systemctl unmask console-getty.service \
+  && systemctl enable console-getty.service
+~~~

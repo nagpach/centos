@@ -1,6 +1,8 @@
 FROM centos:latest
 MAINTAINER dev@fedux.org
 
+ENV container docker
+
 # Disable networking by default
 ENV NETWORKING_ENABLED no
 
@@ -42,28 +44,34 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4
     && chmod +x /usr/local/bin/gosu
 
 # Make it possible to login via machinectl
-ADD container-getty@.service /usr/lib/systemd/system/container-getty@.service
+# ADD container-getty@.service /usr/lib/systemd/system/container-getty@.service
+#RUN systemctl enable container-getty@.service
+# RUN systemctl enable getty.service
 
 # Setup dbus
-RUN yum install -y dbus
-ADD dbus.service /usr/lib/systemd/system/dbus.service
-RUN systemctl enable dbus
+#RUN yum install -y dbus
+#ADD dbus.service /usr/lib/systemd/system/dbus.service
+##RUN systemctl enable dbus
 
 # No need to configure the network the network is setup by docker
 RUN sed -i -e "\$aNETWORKING=${NETWORKING_ENABLED}" /etc/sysconfig/network
 
 # Setup ssh
-RUN install -m 0755 -d /var/ssh/authorized_keys/ \
-    && install -m 0755 -d /var/ssh/host_keys \
-    && sed -i -e 's/^AuthorizedKeysFile.*/AuthorizedKeysFile	\/var\/ssh\/authorized_keys\/%u/' /etc/ssh/sshd_config \
-    && sed -i -e 's/^PasswordAuthentication.*/PasswordAuthentication	no/' /etc/ssh/sshd_config \
-    && sed -i -e 's/^#UseDNS.*/UseDNS	no/' /etc/ssh/sshd_config \
-    && sed -i -e '/^HostKey/ s/etc\/ssh/var\/ssh\/host_keys/' /etc/ssh/sshd_config \
-    && sed -i -e 's/etc\/ssh/var\/ssh\/host_keys/' /usr/lib/systemd/system/sshd-keygen.service \
-    && sed -i -e 's/etc\/ssh/var\/ssh\/host_keys/' /usr/sbin/sshd-keygen \
-    && systemctl disable sshd
+ RUN install -m 0755 -d /var/ssh/authorized_keys/ \
+     && install -m 0755 -d /var/ssh/host_keys \
+     && sed -i -e 's/^AuthorizedKeysFile.*/AuthorizedKeysFile	\/var\/ssh\/authorized_keys\/%u/' /etc/ssh/sshd_config \
+     && sed -i -e 's/^#UseDNS.*/UseDNS	no/' /etc/ssh/sshd_config \
+     && sed -i -e '/^HostKey/ s/etc\/ssh/var\/ssh\/host_keys/' /etc/ssh/sshd_config \
+     && sed -i -e 's/etc\/ssh/var\/ssh\/host_keys/' /usr/lib/systemd/system/sshd-keygen.service \
+     && sed -i -e 's/etc\/ssh/var\/ssh\/host_keys/' /usr/sbin/sshd-keygen \
+     && sed -i -e 's/^PasswordAuthentication.*/PasswordAuthentication	no/' /etc/ssh/sshd_config \
+     && systemctl disable sshd
 
-VOLUME ["/var/ssh/"]
+# VOLUME ["/var/ssh/"]
+
+RUN echo 'root:toor' | chpasswd
+# RUN systemctl enable getty@tty1
+
 
 # No graphical login
 RUN ln -sf /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target
@@ -77,7 +85,6 @@ WORKDIR /
 
 # Make those available to run systemd as init daemon
 VOLUME ["/sys/fs/cgroup", "/run", "/tmp", "/var/log/journal"]
-ENV container docker
 
 # Run systemd
 CMD ["/usr/sbin/init"]
