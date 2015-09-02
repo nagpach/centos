@@ -70,11 +70,7 @@ RUN yum install -y net-tools telnet bind-tools
      && sed -i -e 's/^PasswordAuthentication.*/PasswordAuthentication	no/' /etc/ssh/sshd_config \
      && systemctl disable sshd
 
-# VOLUME ["/var/ssh/"]
-
-RUN echo 'root:toor' | chpasswd
-# RUN systemctl enable getty@tty1
-
+VOLUME ["/var/ssh/"]
 
 # No graphical login
 RUN ln -sf /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target
