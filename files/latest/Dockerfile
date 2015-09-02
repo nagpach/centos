@@ -56,6 +56,9 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4
 # No need to configure the network the network is setup by docker
 RUN sed -i -e "\$aNETWORKING=${NETWORKING_ENABLED}" /etc/sysconfig/network
 
+# Install debugging utils
+RUN yum install -y net-tools telnet bind-tools
+
 # Setup ssh
  RUN install -m 0755 -d /var/ssh/authorized_keys/ \
      && install -m 0755 -d /var/ssh/host_keys \
