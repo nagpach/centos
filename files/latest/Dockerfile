@@ -57,7 +57,7 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4
 RUN sed -i -e "\$aNETWORKING=${NETWORKING_ENABLED}" /etc/sysconfig/network
 
 # Install debugging utils
-RUN yum install -y net-tools telnet bind-tools
+RUN yum install -y net-tools telnet bind-utils
 
 # Setup ssh
  RUN install -m 0755 -d /var/ssh/authorized_keys/ \
