@@ -53,6 +53,12 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4
 #ADD dbus.service /usr/lib/systemd/system/dbus.service
 ##RUN systemctl enable dbus
 
+# Set TERM to make shells look good
+# if docker exec -it <container> bash
+# is used
+ADD profile.d-xterm.sh /etc/profile.d/xterm.sh
+RUN chmod +x /etc/profile.d/xterm.sh
+
 # No need to configure the network the network is setup by docker
 RUN sed -i -e "\$aNETWORKING=${NETWORKING_ENABLED}" /etc/sysconfig/network
 
