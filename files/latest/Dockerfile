@@ -49,9 +49,7 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4
 # RUN systemctl enable getty.service
 
 # Setup dbus
-#RUN yum install -y dbus
-#ADD dbus.service /usr/lib/systemd/system/dbus.service
-##RUN systemctl enable dbus
+RUN sed -i -e "s/OOMScoreAdjust/# OOMScoreAdjust/" /usr/lib/systemd/system/dbus.service
 
 # Set TERM to make shells look good
 # if docker exec -it <container> bash
