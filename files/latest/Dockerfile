@@ -26,6 +26,9 @@ RUN yum install -y yum-priorities \
     && sed -i -e '/\[extras\]/ a \priority=1' /etc/yum.repos.d/CentOS-Base.repo \
     && sed -i -e '/\[centosplus\]/ a \priority=2' /etc/yum.repos.d/CentOS-Base.repo
 
+# Limit size of journal in containers
+RUN sed -ir "s/#SystemMaxUse=.*/SystemMaxUse=50M/" /etc/systemd/journald.conf
+
 # Make rpmforge work
 ADD enable-rpmforge.sh /usr/local/bin/enable-rpmforge.sh
 RUN chmod +x /usr/local/bin/enable-rpmforge.sh
