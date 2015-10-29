@@ -17,7 +17,9 @@ RUN yum update -y centos-release \
     && yum update -y
 
 # Some helpful tools
-RUN yum install -y vim tar passwd dhclient curl openssh-server
+RUN yum install -y vim tar dhclient curl openssh-server \
+    # Install debugging utils
+    && yum install -y net-tools telnet bind-utils strace lsof
 
 # Set priorities for default repositories
 RUN yum install -y yum-priorities \
@@ -63,9 +65,6 @@ RUN chmod +x /etc/profile.d/xterm.sh
 
 # No need to configure the network the network is setup by docker
 RUN sed -i -e "\$aNETWORKING=${NETWORKING_ENABLED}" /etc/sysconfig/network
-
-# Install debugging utils
-RUN yum install -y net-tools telnet bind-utils
 
 # Setup ssh
  RUN install -m 0755 -d /var/ssh/authorized_keys/ \
