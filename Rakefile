@@ -14,6 +14,7 @@ namespace :docker do
     cmdline << 'docker'
     cmdline << 'build'
     cmdline << '--no-cache=true' if nocache
+    cmdline << '--build-arg http_proxy=http://172.17.42.1:3128' if ENV.key? 'http_proxy'
     cmdline << "-t #{image_name}"
     cmdline << '.'
 
@@ -50,20 +51,4 @@ end
 
 task :clean do
   sh 'sudo rm -rf tmp/*'
-end
-
-namespace :templates do
-  desc 'Copy templates'
-  task :copy do
-    Rake::FileList.new('files/**/*').select { |f| File.directory? f }.each do |d|
-      files = Rake::FileList.new("templates/root/*").to_a
-      files += Rake::FileList.new("templates/root/.???*").to_a
-      FileUtils.cp(files, d)
-
-      type = File.basename(File.dirname(d))
-      files = Rake::FileList.new("templates/#{type}/*").to_a
-      files += Rake::FileList.new("templates/#{type}/.???*").to_a
-      FileUtils.cp(files, d)
-    end
-  end
 end

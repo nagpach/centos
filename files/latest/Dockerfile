@@ -1,13 +1,11 @@
 FROM centos:latest
 MAINTAINER dev@fedux.org
 
+# Make systemd aware about the fact that it runs inside a container
 ENV container docker
 
 # Disable networking by default
 ENV NETWORKING_ENABLED no
-
-# ENV http_proxy http://172.17.42.1:3128
-# ENV https_proxy https://172.17.42.1:3128
 
 # No mirror plugin
 RUN sed -ir -e "s/enabled=1/enabled=0/" /etc/yum/pluginconf.d/fastestmirror.conf
@@ -94,3 +92,6 @@ VOLUME ["/sys/fs/cgroup", "/run", "/tmp", "/var/log/journal"]
 
 # Run systemd
 CMD ["/usr/sbin/init"]
+
+# To shutdown systemd in your container we need to use SIGINT
+STOPSIGNAL "SIGINT"
