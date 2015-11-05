@@ -46,18 +46,11 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4
     && rm -r /root/.gnupg/ \
     && chmod +x /usr/local/bin/gosu
 
-# Make it possible to login via machinectl
-# ADD container-getty@.service /usr/lib/systemd/system/container-getty@.service
-#RUN systemctl enable container-getty@.service
-# RUN systemctl enable getty.service
-
 # Setup dbus
 RUN yum install -y dbus \
   && sed -i -e "s/OOMScoreAdjust/# OOMScoreAdjust/" /usr/lib/systemd/system/dbus.service
 
-# Set TERM to make shells look good
-# if docker exec -it <container> bash
-# is used
+# Set TERM to make shells look good if docker exec -it <container> bash is used
 ADD profile.d-xterm.sh /etc/profile.d/xterm.sh
 RUN chmod +x /etc/profile.d/xterm.sh
 
@@ -87,7 +80,7 @@ RUN rm -fr /tmp/* \
 # Working Directory
 WORKDIR /
 
-# Make those available to run systemd as init daemon
+# Export those available to run systemd as init daemon
 VOLUME ["/sys/fs/cgroup", "/run", "/tmp", "/var/log/journal"]
 
 # Run systemd
