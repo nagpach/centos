@@ -9,18 +9,22 @@ namespace :docker do
   desc 'Build docker image'
   task :build, :nocache do |_, args|
     nocache = args[:nocache]
+    proxy = '172.17.0.1'
+    docker_file = 'files/latest/Dockerfile'
 
     cmdline = []
     cmdline << 'docker'
     cmdline << 'build'
     cmdline << '--no-cache=true' if nocache
-    cmdline << '--build-arg http_proxy=http://172.17.42.1:3128' if ENV.key? 'http_proxy'
+    cmdline << "--build-arg http_proxy=http://#{proxy}:3128" if ENV.key? 'http_proxy'
+    cmdline << "--build-arg https_proxy=https://#{proxy}:3128" if ENV.key? 'https_proxy'
+    cmdline << "--build-arg HTTP_PROXY=http://#{proxy}:3128" if ENV.key? 'HTTP_PROXY'
+    cmdline << "--build-arg HTTPS_PROXY=https://#{proxy}:3128" if ENV.key? 'HTTPS_PROXY'
     cmdline << "-t #{image_name}"
+    cmdline << "-f #{docker_file}"
     cmdline << '.'
 
-    Dir.chdir 'files/latest' do
-      sh cmdline.join(' ')
-    end
+    sh cmdline.join(' ')
   end
 
   desc 'Run docker container'
