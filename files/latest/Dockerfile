@@ -87,4 +87,4 @@ VOLUME ["/sys/fs/cgroup", "/run", "/tmp", "/var/log/journal"]
 CMD ["/usr/sbin/init"]
 
 # To shutdown systemd in your container we need to use SIGINT
-STOPSIGNAL "SIGINT"
+# STOPSIGNAL "SIGINT"
