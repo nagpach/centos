@@ -22,7 +22,7 @@ namespace :docker do
     cmdline << "--build-arg HTTPS_PROXY=https://#{proxy}:3128" if ENV.key? 'HTTPS_PROXY'
     cmdline << "-t #{image_name}"
     cmdline << "-f #{docker_file}"
-    cmdline << '.'
+    cmdline << File.dirname(docker_file)
 
     sh cmdline.join(' ')
   end
