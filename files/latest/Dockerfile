@@ -68,8 +68,6 @@ RUN sed -i -e "\$aNETWORKING=${NETWORKING_ENABLED}" /etc/sysconfig/network
      && sed -i -e 's/^PasswordAuthentication.*/PasswordAuthentication	no/' /etc/ssh/sshd_config \
      && systemctl disable sshd
 
-VOLUME ["/var/ssh/"]
-
 # No graphical login
 RUN ln -sf /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target
 
@@ -81,7 +79,7 @@ RUN rm -fr /tmp/* \
 WORKDIR /
 
 # Export those available to run systemd as init daemon
-VOLUME ["/sys/fs/cgroup", "/run", "/tmp", "/var/log/journal"]
+VOLUME ["/sys/fs/cgroup", "/run", "/tmp"]
 
 # Run systemd
 CMD ["/usr/sbin/init"]

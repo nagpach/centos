@@ -1,5 +1,3 @@
-require 'pathname'
-
 task default: 'docker:build'
 
 namespace :docker do
@@ -15,7 +13,7 @@ namespace :docker do
     cmdline = []
     cmdline << 'docker'
     cmdline << 'build'
-    cmdline << '--no-cache=true' if nocache
+    cmdline << '--no-cache=true' if nocache == 'true'
     cmdline << "--build-arg http_proxy=http://#{proxy}:3128" if ENV.key? 'http_proxy'
     cmdline << "--build-arg https_proxy=https://#{proxy}:3128" if ENV.key? 'https_proxy'
     cmdline << "--build-arg HTTP_PROXY=http://#{proxy}:3128" if ENV.key? 'HTTP_PROXY'
@@ -31,16 +29,11 @@ namespace :docker do
   task :run, :command do |_, task_args|
     command = task_args[:command]
 
-    mkdir_p %w(var/ssh/authorized_keys var/ssh/host_keys)
-
     args =[]
     args << '-it'
     args << '--rm'
     args << "--name #{container_name}"
-    args << "-p 8022:22"
     args << "-v /sys/fs/cgroup:/sys/fs/cgroup"
-    args << "-v #{File.expand_path('var/ssh')}:/var/ssh/" if File.directory? 'var/ssh'
-    # args << "-v /var/log/journal:/var/log/journal" if File.directory? '/var/log/journal'
 
     cmdline = []
     cmdline << 'docker'
