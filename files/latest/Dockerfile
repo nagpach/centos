@@ -15,7 +15,7 @@ RUN yum update -y centos-release \
     && yum update -y
 
 # Some helpful tools
-RUN yum install -y vim tar dhclient curl openssh-server \
+RUN yum install -y vim tar dhclient curl \
     # Install debugging utils
     && yum install -y net-tools telnet bind-utils strace lsof
 
