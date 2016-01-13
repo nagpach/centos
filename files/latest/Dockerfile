@@ -57,17 +57,6 @@ RUN chmod +x /etc/profile.d/xterm.sh
 # No need to configure the network the network is setup by docker
 RUN sed -i -e "\$aNETWORKING=${NETWORKING_ENABLED}" /etc/sysconfig/network
 
-# Setup ssh
- RUN install -m 0755 -d /var/ssh/authorized_keys/ \
-     && install -m 0755 -d /var/ssh/host_keys \
-     && sed -i -e 's/^AuthorizedKeysFile.*/AuthorizedKeysFile	\/var\/ssh\/authorized_keys\/%u/' /etc/ssh/sshd_config \
-     && sed -i -e 's/^#UseDNS.*/UseDNS	no/' /etc/ssh/sshd_config \
-     && sed -i -e '/^HostKey/ s/etc\/ssh/var\/ssh\/host_keys/' /etc/ssh/sshd_config \
-     && sed -i -e 's/etc\/ssh/var\/ssh\/host_keys/' /usr/lib/systemd/system/sshd-keygen.service \
-     && sed -i -e 's/etc\/ssh/var\/ssh\/host_keys/' /usr/sbin/sshd-keygen \
-     && sed -i -e 's/^PasswordAuthentication.*/PasswordAuthentication	no/' /etc/ssh/sshd_config \
-     && systemctl disable sshd
-
 # No graphical login
 RUN ln -sf /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target
 
