@@ -1,48 +1,62 @@
-# centos-docker images
+# centos image
 
-## Overview
+This "docker" image is based on the "Docker" CentOS base image.
 
-There are the following images available:
+## Differences between "feduxorg/centos" and "library/centos"
 
-* latest
-
-## Further description of images
-
-### All images
-
-* `yum-priorities`-plugin is installed and enabled
-* rpmforge-repository is installed and enabled
-* `tar`-command is installed
-* `vim`-editor is installed
+* Uses "systemd" as PID 1 by default
+* Has the network service "disabled" - this really only prevents an error,
+  but does not disable network functionality
+* The fast mirror plugin is diabled to reduce round-trips before download
+  packages via HTTP proxies
+* Enabled priorities for CentOS repositories
+* Limited journal size in container since an "outer" journald does not touch
+  journals from other inner journalds.
+* Added scripts to enable "EPEL" or "RPMFORGE"
+* Added "gosu" as sudo/su replacement
+* Enabled and running "dbus"-service
+* Set TERM-environment variable to xterm
+* Script Runner for simple initializer shell scripts
+* Additional packages
+  * vim
+  * tar
+  * dhclient
+  * curl
+  * net-tools
+  * telnet
+  * bind-utils
+  * strace
+  * lsof
+* Addiontional volumes
+  * /sys/fs/cgroup
+  * /run
+  * /tmp
+* Default command is "/usr/sbin/init" aka "systemd"
 * Workdir is "/"
 
-### "systemd-"-images
+## Usage
+
+### Default
 
 To run a image please use this command:
 
-```bash
-docker run -ti -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v $PWD/ssh/:/var/ssh -v /var/log/journal:/var/log/journal -p 8022:22 username/centos
-```
+~~~bash
+docker run -ti -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /var/log/journal:/var/log/journal feduxorg/centos
+~~~
 
-*Example:*
+### Mount scripts
 
-```docker
-FROM feduxorg/centos:latest
-MAINTAINER fedux.org
+If a directory is mounted to `/var/lib/scripts`, the `script-runner.service`
+starts `/usr/local/bin/script-runner.sh`. This script runs all executable files
+in `/var/lib/scripts`.
 
-ADD id_rsa.pub /var/ssh/authorized_keys/root
-
-# Otherwise a new ssh host key will be generated on each start
-RUN /usr/sbin/sshd-keygen
-```
-
-```bash
-docker build -t username/centos-xyz .
-```
+~~~bash
+docker run -it --rm --name centos1 -v /sys/fs/cgroup:/sys/fs/cgroup -v $(pwd)/tmp:/var/lib/scripts feduxorg/centos
+~~~
 
 ### Login Prompt
 
-If you prefer to have a Login Prompt you need to add the following in your
+If you prefer to have a login prompt you need to add the following in your
 `Dockerfile`.
 
 ~~~docker
