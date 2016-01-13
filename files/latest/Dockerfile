@@ -60,6 +60,12 @@ RUN sed -i -e "\$aNETWORKING=${NETWORKING_ENABLED}" /etc/sysconfig/network
 # No graphical login
 RUN ln -sf /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target
 
+# Add script runner
+ADD script-runner.service /etc/systemd/system/script-runner.service
+ADD script-runner.sh /usr/local/bin/script-runner.sh
+RUN systemctl enable script-runner \
+  && chmod +x /usr/local/bin/script-runner.sh
+
 # Cleanup
 RUN rm -fr /tmp/* \
     && yum clean -y all

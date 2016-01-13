@@ -1,0 +1,11 @@
+[Unit]
+Description=Script Runner which runs scripts on Startup
+ConditionPathIsDirectory=/var/lib/scripts
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/script-runner.sh /var/lib/scripts
+
+[Install]
+WantedBy=multi-user.target
+
