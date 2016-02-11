@@ -17,7 +17,7 @@ RUN yum update -y centos-release \
 # Some helpful tools
 RUN yum install -y vim tar dhclient curl \
     # Install debugging utils
-    && yum install -y net-tools telnet bind-utils strace lsof
+    && yum install -y net-tools telnet bind-utils strace lsof less
 
 # Set priorities for default repositories
 RUN yum install -y yum-priorities \

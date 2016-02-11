@@ -4,7 +4,7 @@ ConditionPathIsDirectory=/var/lib/scripts
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/script-runner.sh /var/lib/scripts
+ExecStart=/usr/local/bin/script-runner.sh /var/lib/scripts /var/lib/local/scripts
 
 [Install]
 WantedBy=multi-user.target
