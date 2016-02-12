@@ -52,8 +52,8 @@ ADD profile.d-xterm.sh /etc/profile.d/xterm.sh
 RUN chmod +x /etc/profile.d/xterm.sh
 
 # No need to configure the network the network is setup by docker
-RUN rm /usr/lib/systemd/system/systemd-remount-fs.service \
-  && systemctl disable network
+RUN systemctl disable network \
+  && sed -ie '/ConditionPathExists/ a\ ConditionVirtualization=vm' /usr/lib/systemd/system/systemd-remount-fs.service
 
 # No graphical login
 RUN ln -sf /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target
