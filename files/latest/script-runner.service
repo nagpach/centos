@@ -1,6 +1,7 @@
 [Unit]
 Description=Script Runner which runs scripts on Startup
-ConditionPathIsDirectory=/var/lib/scripts
+ConditionPathIsDirectory=|/var/lib/scripts
+ConditionPathIsDirectory=|/var/lib/local/scripts
 
 [Service]
 Type=oneshot
