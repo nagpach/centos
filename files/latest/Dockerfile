@@ -11,6 +11,9 @@ RUN sed -ir -e "s/enabled=1/enabled=0/" /etc/yum/pluginconf.d/fastestmirror.conf
 RUN yum update -y centos-release \
     && yum update -y
 
+# Remove unneeded dependencies
+RUN sed -ir -e '$a clean_requirements_on_remove=1' /etc/yum.conf
+
 # Some helpful tools
 RUN yum install -y vim tar dhclient curl \
     # Install debugging utils
