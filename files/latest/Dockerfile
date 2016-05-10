@@ -67,6 +67,9 @@ ADD script-runner.sh /usr/local/bin/script-runner.sh
 RUN systemctl enable script-runner \
   && chmod +x /usr/local/bin/script-runner.sh
 
+# Set correct time zone for Germany
+RUN ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+
 # Cleanup
 RUN rm -fr /tmp/* \
     && yum clean -y all
