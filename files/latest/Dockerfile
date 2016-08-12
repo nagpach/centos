@@ -3,6 +3,7 @@ MAINTAINER dev@fedux.org
 
 # Make systemd aware about the fact that it runs inside a container
 ENV container docker
+ENV TERM xterm
 
 # No mirror plugin
 RUN sed -ir -e "s/enabled=1/enabled=0/" /etc/yum/pluginconf.d/fastestmirror.conf
