@@ -29,10 +29,6 @@ RUN yum install -y yum-priorities \
 # Limit size of journal in containers
 RUN sed -ir "s/#SystemMaxUse=.*/SystemMaxUse=50M/" /etc/systemd/journald.conf
 
-# Make rpmforge work
-ADD enable-rpmforge.sh /usr/local/bin/enable-rpmforge.sh
-RUN chmod +x /usr/local/bin/enable-rpmforge.sh
-
 # Make epel work
 ADD enable-epel.sh /usr/local/bin/enable-epel.sh
 RUN chmod +x /usr/local/bin/enable-epel.sh
