@@ -75,7 +75,7 @@ RUN rm -fr /tmp/* \
 WORKDIR /
 
 # Export those available to run systemd as init daemon
-VOLUME ["/sys/fs/cgroup", "/run", "/tmp"]
+# VOLUME ["/sys/fs/cgroup", "/run", "/tmp"]
 
 # Run systemd
 CMD ["/usr/sbin/init"]
